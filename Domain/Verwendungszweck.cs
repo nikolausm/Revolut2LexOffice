@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 
 namespace Revolut2LexOffice
 {
-	internal class Verwendungszweck : ITarget
+	internal sealed class Verwendungszweck : ITarget
 	{
-		private IRevolutRecord record;
+		private readonly IRevolutRecord record;
 
 		public Verwendungszweck(IRevolutRecord record)
 		{
@@ -13,11 +14,11 @@ namespace Revolut2LexOffice
 
 		public IEnumerable<IField> Fields()
 		{
-			return new List<Field>
-			{
-				new Field("Reference", record.Reference),
-				new Field("Type", record.Type),
-			};
+			yield return new Field(
+				String.IsNullOrWhiteSpace(record.Reference)
+					? "n/a"
+					: record.Reference
+			);
 		}
 	}
 }
